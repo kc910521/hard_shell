@@ -1,0 +1,9 @@
+
+function W8_4_USER () {
+  until who | grep "$1" > /dev/null
+  do
+    sleep ${2:30}
+  done
+  echo retur w84user func
+  return 0
+}

@@ -1,0 +1,7 @@
+#! /bin/bash
+
+. ./wait4u
+
+W8_4_USER $1 30
+
+echo ookk

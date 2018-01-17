@@ -1,0 +1,35 @@
+#! /bin/sh -
+
+set -x
+
+who | wc -l
+
+set +x
+
+umask 077
+
+PERSON=/tmp/pd.key.person.$$
+
+OFFICE=/tmp/pd.key.office.$$
+
+TELEPHONE=/tmp/pd.key.office.$$
+
+USER=/tmp/pd.key.user.$$
+
+trap "exit 1"  HUP INT POPE QUIT TERM
+
+trap "rm -f $PERSON $OFFICE $TELEPHONE $USER" EXIT
+
+awk -F: '{ print $1 ":" $5}' > $USER
+
+sed -e 's=/.*==' \
+    -e 's=^\([^:]):\(.*\) \([^ ]*\)=\1:\3, \2=' <$USER | sort >$PERSON
+
+sed -e 's=^\([^:]):[^/]*/\([^/]*\)/.*$=\1:\2=' < $USER | sort > $OFFICE
+
+sed -e 's=^\([^:]):[^/]*/[^/]*/\([^/]*\)=\1:\2=' < $USER | sort > $TELEPHONE
+
+join -t: $PERSON $OFFICE |
+    join -t: - $TELEPHONE |
+        cut -d: -f 2- |
+            sort -t:
