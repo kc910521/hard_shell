@@ -1,10 +1,12 @@
 #! /bin/bash
+set -e
 
 # https://github.com/kc910521
 # test in root,  ubuntu 16.04
 # refine app usage log from sys log history
 
 # backup map file
+
 CTIME=$(date +%Y-%m)
 
 BK_FNAME=$(whoami)_${CTIME}.his.bk
@@ -14,7 +16,7 @@ FILE_PATH=~/.bash_history
 #set +x
 echo bk name is ${BK_FNAME}
 
-EXP_IGNORE_HEAD='ls|cd|grep|history|vi|kill|ps|tail|less|more|iptables'
+EXP_IGNORE_HEAD='ls|cd|grep|history|vi|kill|ps|tail|less|more|iptables|rm'
 
 if [ ! -f "./${BK_FNAME}" ];then
   echo ${BK_FNAME}:create...
