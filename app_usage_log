@@ -13,6 +13,28 @@ BK_FNAME=$(whoami)_${CTIME}.his.bk
 
 FILE_PATH=~/.bash_history
 
+TEMP_HEAD=
+
+#data display
+function MK_OUTPUT_LINE(){
+  while read LINE
+  do
+    ORG_LINE=$LINE
+    TH_TMP=$(echo $LINE| sed 's/ .*$//')
+    #echo TH_TMP
+    if [ "${TEMP_HEAD}" == "${TH_TMP}"  ];then
+      echo ''
+    else
+       TEMP_HEAD=$TH_TMP
+       echo ======================================================================\| $TEMP_HEAD \|==========================================
+    fi
+    #echo "ssss"
+    
+    echo $LINE
+  done < $BK_FNAME
+}
+
+
 #set +x
 echo bk name is ${BK_FNAME}
 
@@ -26,5 +48,8 @@ else
   echo merge both
   cat $FILE_PATH ./$BK_FNAME | sort -u | egrep -v "(^($EXP_IGNORE_HEAD))|(^sudo\s+($EXP_IGNORE_HEAD))" > ./$BK_FNAME
 fi
+
+MK_OUTPUT_LINE;
+
 
 #set -x
