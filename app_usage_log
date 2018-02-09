@@ -22,7 +22,8 @@ function PARAMS_EQ_CMD(){
     fstParam=$1
     for i in "$@"; do
       if [ $idx -gt 0 ];then
-        if [ $i == "$fstParam" ];then
+        if [[ "${fstParam}" =~ .*${i}.*$ ]]
+        then
 	  echo 1;
 	  return 0;
 	fi
@@ -81,11 +82,11 @@ EXP_IGNORE_HEAD='ls|cd|grep|history|vi|kill|ps|tail|less|more|iptables|rm'
 
 if [ ! -f "./${BK_FNAME}" ];then
   echo ${BK_FNAME}:create...
-  cat $FILE_PATH | sort -u | egrep -v "(^($EXP_IGNORE_HEAD))|(^sudo\s+($EXP_IGNORE_HEAD))" > ./$BK_FNAME
+  cat $FILE_PATH | sort -u | egrep -v -i "(^($EXP_IGNORE_HEAD))|(^sudo\s+($EXP_IGNORE_HEAD))" > ./$BK_FNAME
   echo saved 
 else
   echo merge both
-  cat $FILE_PATH ./$BK_FNAME | sort -u | egrep -v "(^($EXP_IGNORE_HEAD))|(^sudo\s+($EXP_IGNORE_HEAD))" > ./$BK_FNAME
+  cat $FILE_PATH ./$BK_FNAME | sort -u | egrep -v -i "(^($EXP_IGNORE_HEAD))|(^sudo\s+($EXP_IGNORE_HEAD))" > ./$BK_FNAME
 fi
 
 MK_OUTPUT_LINE $*;
